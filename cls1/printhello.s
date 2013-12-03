@@ -1,7 +1,6 @@
 BOOTSEG equ 0x07C0 ;宏定义，用于初始化ES
 
-mov ax, HelloMsg ;不支持直接将HelloMsg赋值给bp
-mov bp, ax
+mov bp, HelloMsg ;将HelloMsg的地址赋值给bp
 mov ax, BOOTSEG
 mov es, ax      ;es:bp = 字符串地址
                 ;HelloMsg只是段内的偏移地址
