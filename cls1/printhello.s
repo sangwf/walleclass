@@ -15,7 +15,13 @@ mov dx, 0x0000 ;第0行0列开始
 int 0x10
 
 loop1:
-    jmp BOOTSEG: loop1 ;之所以带上段选择符，道理同HelloMsg
+    jmp loop1 ;jmp段内跳转，是相对当前地址
+              ;翻译成机器指令后，是0xeb 0xfe
+              ;0xeb表示jmp段内跳转的指令号
+              ;0xfe即-2，表示往前跳2个字节
+              ;这是因为执行本指令时，IP已经移到下条
+              ;指令开头了。
+              ;所以不会是jmp 0x00这样的写法。
 
 HelloMsg:
     db "Hello, world!" ;共13个字符
