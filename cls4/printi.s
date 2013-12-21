@@ -77,13 +77,13 @@ int_ignore: ;默认的硬件中断处理函数
     mov [scr_loc], ebx ;更新位置
     ;end
     
-    push gs
-    push es
-    push ds
-    push edx
-    push ecx
-    push ebx
-    push eax
+    pop gs
+    pop es
+    pop ds
+    pop edx
+    pop ecx
+    pop ebx
+    pop eax
     iret
 
 scr_loc:
