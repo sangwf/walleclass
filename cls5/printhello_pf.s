@@ -76,6 +76,16 @@ inc ecx
 cmp ecx, 512 ;设为有效
 jne set_page
 
+mov ebx, 0x00000000 ;P = 0
+set_page_invalid:
+mov [eax + ecx * 4], ebx
+
+inc ecx
+cmp ecx, 1024 ;设为无效
+jne set_page_invalid
+
+
+
 ;开启分页模式
 ;即将CR0寄存器的第31位置1
 mov eax, CR0
