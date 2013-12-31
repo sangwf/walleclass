@@ -42,13 +42,17 @@ mov ax, dx
 
 mov edx, 0x8E00 ;P DPL ...
 mov ecx, 0x09 ;键盘中断号
-lea edi, [idt + ecx * 8] ;键盘中断的偏移地址放到esi
+lea edi, [idt + ecx * 8] ;键盘中断的偏移地址放到edi
 mov [edi], eax
 mov [edi + 4], edx
 
 
 ;加载中断描述符表基地址/限长
 lidt [lidt_opcode]
+
+;中断屏蔽管理
+mov al, 0xFD ;只放开键盘中断
+out 0x21, al
 
 sti ;开中断
 
@@ -57,6 +61,7 @@ LOOP1:
 
 align 4
 int_ignore: ;默认的硬件中断处理函数
+    iret
     push eax
     push ebx
     push ecx
@@ -64,6 +69,10 @@ int_ignore: ;默认的硬件中断处理函数
     push ds
     push es
     push gs
+
+    mov al, 0x20
+    out 0x20, al
+
 
     mov eax, DATA_SEL
     mov ds, ax
@@ -101,35 +110,32 @@ int_keyboard: ;键盘中断处理函数
     push ecx
     push edx
     push ds
-    push es
     push gs
 
     mov eax, DATA_SEL
     mov ds, ax
-    mov es, ax
 
     in al, 0x60 ;读取按键的扫描码
+    call func_delay
 
     call key_display
 
     ;对键盘进行复位处理
     ;先禁用键盘，然后重新允许使用
     in al, 0x61
-    nop
-    nop
+    call func_delay
     or al, 0x80
-    nop
-    nop
+    call func_delay
     out 0x61, al
-    nop
-    nop
+    call func_delay
     and al, 0x7F
     out 0x61, al
+    call func_delay
+
     mov al, 0x20
     out 0x20, al
 
     pop gs
-    pop es
     pop ds
     pop edx
     pop ecx
@@ -137,14 +143,25 @@ int_keyboard: ;键盘中断处理函数
     pop eax
     iret
 
+func_delay:
+    nop
+    nop
+    nop
+    nop
+    nop
+    nop
+    nop
+    nop
+    ret
+
 key_display:
     ;剔除按键弹起的中断，第8位为1
     mov bl, al
     and bl, 0x80
     cmp bl, 0
-;`    jne .key_ret
+    jne .key_ret
 
-    and ax, 0x007f ;只用最后7位
+    and eax, 0x007f ;只用最后7位
     mov al, [key_map + eax] ;通过映射表寻找对应字符
 
     mov ebx, SCREEN_SEL
@@ -159,7 +176,7 @@ key_display:
     add ebx, 1
     mov [scr_loc], ebx ;更新位置
 
-.key_ret:
+    .key_ret:
     ret
 
 ;for my Macbook Pro keyboard
