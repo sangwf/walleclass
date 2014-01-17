@@ -98,8 +98,7 @@ sti ;开中断
 mov eax, 0x00200000
 mov byte [eax], 'P' ;page fault
 
-;mov bl, [eax]
-mov bl, 'P'
+mov bl, [eax]
 mov edx, 0
 mov ecx, SCREEN_SEL
 mov gs, ecx
