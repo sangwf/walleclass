@@ -6,7 +6,7 @@ bits 32 ;这是32位的指令
 
 mov eax, DATA_SEL ;先设置数据段
 mov ds, eax
-mov es, eax
+mov gs, eax ;这里不赋值，后果很严重
 
 
 ;初始化栈
