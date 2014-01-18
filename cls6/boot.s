@@ -12,7 +12,7 @@ mov ax, 0x1000 ;设置拷贝的目的地段描述符为0x1000
 mov es, ax
 xor bx, bx     ;设置bx为0，[es:bx]表示目的地内存地址
                ;即0x1000 * 16 + 0 = 0x10000
-mov al, 10      ;读取的扇区数为10
+mov al, 15      ;读取的扇区数为15
                ;注意：如果读取的内容超过512byte，则加大
 mov ah, 0x02   ;AH = 2，表示读扇区
 int 0x13
@@ -22,7 +22,7 @@ mov ax, 0x1000
 mov ds, ax
 xor ax, ax ;移动到内存0地址
 mov es, ax
-mov cx, 1280 ;移动cx个double word(4 bytes)
+mov cx, 2000 ;移动cx个double word(4 bytes)
 sub si, si
 sub di, di
 rep movsd
