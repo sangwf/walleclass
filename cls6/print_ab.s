@@ -112,7 +112,7 @@ int_ignore: ;默认的硬件中断处理函数
 ;    call func_write_char
    
 ;    pop eax
-;    iret
+    iret
 
 align 4
 int_timer: ;时钟中断处理函数
