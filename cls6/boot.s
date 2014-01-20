@@ -25,6 +25,7 @@ mov es, ax
 mov cx, 2000 ;移动cx个double word(4 bytes)
 sub si, si
 sub di, di
+cld ;防止df标记不对导致复制方向出错
 rep movsd
 
 mov ax, BOOTSEG
