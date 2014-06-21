@@ -174,6 +174,9 @@ int_fork: ;fork系统调用处理函数
     inc eax
     mov [process_count], eax
     mov eax, [SS: ESP + 8] ;EIP
+                           ;why + 8?
+                           ;[esp] = eax; [esp + 4] = ds
+                           ;[esp + 8] = eip; [esp + 12] = ss
     mov [task1_eip], eax
     mov dword [task1_eax], 0 ;对子进程，设置eax为0
 
@@ -419,14 +422,14 @@ task0:
     .do_father:
     mov al, 'A'
     int 0x81
-    mov ecx, 0x1fffff
+    mov ecx, 0x1fffff ;delay a while
     .t0:
     loop .t0
     jmp .do_father
     .do_son:
     mov al, 'B'
     int 0x81
-    mov ecx, 0x1fffff
+    mov ecx, 0x1fffff ;delay a while
     .t1:
     loop .t1
     jmp .do_son
