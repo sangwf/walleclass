@@ -5,5 +5,3 @@ int fork_syscall()
     
     return ret;
 }
-
-
