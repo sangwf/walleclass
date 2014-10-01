@@ -30,9 +30,9 @@ int exec(char *filename)
 {    
     int ret = -1;
     if (strncmp(filename, "print_hello", 11) == 0) {
-        ret = exec_syscall(0x2600, 0x200); // 制作映像文件时，将print_hello被拷贝到了0x2600处
+        ret = exec_syscall(0x2600, 0x200); // print_hello存放在0x2600处
     } else {
-        ret = exec_syscall(0x2A00, 0x200); // print_world
+        ret = exec_syscall(0x2A00, 0x200); // print_world存放在0x2A00处
     }
 
     return ret;

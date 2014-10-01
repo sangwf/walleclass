@@ -264,7 +264,7 @@ int_exec: ;eax是起始内存地址，ecx是文件大小
     lea di, [0x2500]
     rep movsb
     
-    mov dword [SS: ebp + 4], 0x2500 ;修改eip
+    mov dword [ss: ebp + 4], 0x2500 ;修改eip
 
     pop ebx
     pop ds
